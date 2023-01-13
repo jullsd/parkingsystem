@@ -6,21 +6,13 @@ import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Date;
-
 import static java.lang.Thread.sleep;
-import static junit.framework.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -66,42 +58,46 @@ public class ParkingDataBaseIT {
     }
 
     @Test
+    @DisplayName("Check that a ticket is actualy saved in DB and Parking table is updated with availability")
     public void testParkingACar() {
 
         //Arrange
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        Ticket ticketVehiculeRegleNumberInCommingUser = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+
 
         //Act
-        ParkingSpot parkingSpotVehiculeRegleInCommingUser = ticketVehiculeRegleNumberInCommingUser.getParkingSpot();
-        ParkingSpot pakingSpotVehiculeRegleNextInCommingUser = parkingService.getNextParkingNumberIfAvailable();
+        Ticket ticketIncommingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+        ParkingSpot parkingSpotInCommingVehicule = ticketIncommingVehicule.getParkingSpot();
+        ParkingSpot pakingSpotNextIncommingVehicule = parkingService.getNextParkingNumberIfAvailable();
 
         // Assert
-        assertThat(ticketVehiculeRegleNumberInCommingUser.getVehicleRegNumber()).isEqualTo(VEHICLE_REGLE_NUMBER);
-        assertThat(parkingSpotVehiculeRegleInCommingUser).isNotSameAs(pakingSpotVehiculeRegleNextInCommingUser);
+        assertThat(ticketIncommingVehicule.getVehicleRegNumber()).isEqualTo(VEHICLE_REGLE_NUMBER);
+        assertThat(parkingSpotInCommingVehicule).isNotSameAs(pakingSpotNextIncommingVehicule);
 
 
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
     }
 
     @Test
+    @DisplayName("Check that the fare generated and out time are populated correctly in the database")
     public void testParkingLotExit() throws InterruptedException {
-        //Arrange
 
+        //Arrange
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         sleep(1000);
         parkingService.processExitingVehicle();
-        Ticket ticketVehiculeRegleNumberOutComingUser = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+
+        //ACT
+        Ticket ticketOutcomingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
 
 
         //Assert
-        assertThat(ticketVehiculeRegleNumberOutComingUser).isNotNull();
-        assertThat(ticketVehiculeRegleNumberOutComingUser.getOutTime()).isNotNull();
-        assertThat(ticketVehiculeRegleNumberOutComingUser.getPrice()).isNotNull();
+        assertThat(ticketOutcomingVehicule).isNotNull();
+        assertThat(ticketOutcomingVehicule.getOutTime()).isNotNull();
+        assertThat(ticketOutcomingVehicule.getPrice()).isNotNull();
 
-        //TODO: check that the fare generated and out time are populated correctly in the database
+
     }
 
 }
