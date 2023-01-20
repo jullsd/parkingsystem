@@ -24,13 +24,13 @@ public class ParkingDataBaseIT {
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
 
-    private final String VEHICLE_REGLE_NUMBER = "AH707QN";
+    private final String VEHICLE_REGLE_NUMBER = "AH707QNN";
+
+    private final String OTHER_VEHICLE_REGLE_NUMBER = "BN609LL";
 
 
     public String getVEHICLE_REGLE_NUMBER() {
         return VEHICLE_REGLE_NUMBER;
-
-
     }
 
     @Mock
@@ -54,6 +54,20 @@ public class ParkingDataBaseIT {
 
     @AfterAll
     private static void tearDown() {
+
+    }
+
+
+
+    @Test
+    public void existingVehichleRegNumberInDB() {
+
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+        Ticket ticketIncommingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+        boolean isReccuring = parkingService.existingVehichleRegNumberInDB(ticketIncommingVehicule);
+
+        assertThat(isReccuring).isTrue();
 
     }
 
@@ -86,13 +100,15 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         sleep(1000);
-        parkingService.processExitingVehicle();
+
 
         //ACT
-        Ticket ticketOutcomingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+
+        parkingService.processExitingVehicle();
 
 
         //Assert
+        Ticket ticketOutcomingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
         assertThat(ticketOutcomingVehicule).isNotNull();
         assertThat(ticketOutcomingVehicule.getOutTime()).isNotNull();
         assertThat(ticketOutcomingVehicule.getPrice()).isNotNull();

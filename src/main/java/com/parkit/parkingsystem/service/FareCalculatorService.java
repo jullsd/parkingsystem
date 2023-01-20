@@ -26,11 +26,11 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
-                ticket.setPrice(differenceInHours * Fare.CAR_RATE_PER_HOUR * discountCalculatorService.getDiscount());
+                ticket.setPrice(differenceInHours * Fare.CAR_RATE_PER_HOUR * ticket.getDiscount());
                 break;
             }
             case BIKE: {
-                ticket.setPrice(differenceInHours * Fare.BIKE_RATE_PER_HOUR * discountCalculatorService.getDiscount());
+                ticket.setPrice(differenceInHours * Fare.BIKE_RATE_PER_HOUR * ticket.getDiscount());
                 break;
             }
             default:

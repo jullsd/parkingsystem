@@ -8,8 +8,19 @@ public class Ticket {
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
     private double price;
+    private double discount;
     private Date inTime;
+
     private Date outTime;
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
 
 
     public int getId() {
