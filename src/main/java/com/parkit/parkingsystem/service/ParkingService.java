@@ -8,7 +8,9 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.Date;
+import java.util.List;
 
 public class ParkingService {
 
@@ -22,6 +24,7 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
+
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -59,16 +62,13 @@ public class ParkingService {
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
-    }
-
-    public boolean existingVehichleRegNumberInDB(Ticket ticket) {
-
-        Ticket t = ticketDAO.getTicket(ticket.getVehicleRegNumber());
-        boolean isRecurring = (t!=null);
-        discountCalculatorService.calulateDiscountforReccuringUsers(t);
-        return isRecurring;
 
     }
+
+   public boolean isRecurringUser(String vehicleRegNumber) {
+        List<Ticket> tickets = ticketDAO.getAllTicket(vehicleRegNumber);
+
+        return tickets.size() > 1; }
 
     public ParkingSpot getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
@@ -89,6 +89,8 @@ public class ParkingService {
         return parkingSpot;
     }
 
+
+
     private ParkingType getVehichleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
@@ -108,10 +110,13 @@ public class ParkingService {
         }
     }
 
+
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            boolean isRecurringUser = isRecurringUser(vehicleRegNumber);
+            ticket.setReccuring(isRecurringUser);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
             discountCalculatorService.calculateDiscount(ticket);

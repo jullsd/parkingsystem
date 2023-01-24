@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -57,19 +58,6 @@ public class ParkingDataBaseIT {
 
     }
 
-
-
-    @Test
-    public void existingVehichleRegNumberInDB() {
-
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processIncomingVehicle();
-        Ticket ticketIncommingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
-        boolean isReccuring = parkingService.existingVehichleRegNumberInDB(ticketIncommingVehicule);
-
-        assertThat(isReccuring).isTrue();
-
-    }
 
     @Test
     @DisplayName("Check that a ticket is actualy saved in DB and Parking table is updated with availability")

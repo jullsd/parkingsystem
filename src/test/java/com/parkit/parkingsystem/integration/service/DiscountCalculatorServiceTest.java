@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -61,5 +62,30 @@ public class DiscountCalculatorServiceTest {
 
         assertThat(ticket.getDiscount()).isEqualTo(NODISCOUNT);
 
+    }
+
+    @Test
+
+    public void calulateDiscountforReccuringUsers() {
+
+
+        ticket.setReccuring(true);
+
+
+        discountCalculatorService.calulateDiscountforReccuringUsers(ticket);
+
+
+        assertThat(ticket.getDiscount()).isEqualTo(Discount.FIVE_PERCENT_OF_DISCOUNT);
+    }
+
+
+    @Test
+    public void calulateDiscountforNoReccuringUsers() {
+
+        ticket.setReccuring(false);
+
+        discountCalculatorService.calulateDiscountforReccuringUsers(ticket);
+
+        assertThat(ticket.getDiscount()).isEqualTo(Discount.NO_DISCOUNT);
     }
 }

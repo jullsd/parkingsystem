@@ -12,6 +12,17 @@ public class Ticket {
     private Date inTime;
 
     private Date outTime;
+    private boolean isReccuring;
+
+
+    public boolean isReccuring() {
+        return isReccuring;
+    }
+
+    public void setReccuring(boolean reccuring) {
+        isReccuring = reccuring;
+    }
+
 
     public double getDiscount() {
         return discount;
@@ -20,8 +31,6 @@ public class Ticket {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
-
-
 
     public int getId() {
         return id;
