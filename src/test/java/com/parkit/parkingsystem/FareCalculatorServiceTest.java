@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +17,8 @@ import java.util.Date;
 public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
+
+
     private Ticket ticket;
 
     @BeforeAll

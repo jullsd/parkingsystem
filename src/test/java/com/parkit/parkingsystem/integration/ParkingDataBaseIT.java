@@ -12,7 +12,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import java.util.List;
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -27,7 +27,6 @@ public class ParkingDataBaseIT {
 
     private final String VEHICLE_REGLE_NUMBER = "AH707QNN";
 
-    private final String OTHER_VEHICLE_REGLE_NUMBER = "BN609LL";
 
 
     public String getVEHICLE_REGLE_NUMBER() {
@@ -60,22 +59,20 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    @DisplayName("Check that a ticket is actualy saved in DB and Parking table is updated with availability")
+    @DisplayName("Check that a ticket is actualy saved in DB,Parking table is updated with availability and That we can retrieve the list of all associated tickets in database")
     public void testParkingACar() {
 
-        //Arrange
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
         parkingService.processIncomingVehicle();
 
-
-        //Act
         Ticket ticketIncommingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
         ParkingSpot parkingSpotInCommingVehicule = ticketIncommingVehicule.getParkingSpot();
         ParkingSpot pakingSpotNextIncommingVehicule = parkingService.getNextParkingNumberIfAvailable();
 
-        // Assert
         assertThat(ticketIncommingVehicule.getVehicleRegNumber()).isEqualTo(VEHICLE_REGLE_NUMBER);
         assertThat(parkingSpotInCommingVehicule).isNotSameAs(pakingSpotNextIncommingVehicule);
+
 
 
     }
@@ -84,18 +81,12 @@ public class ParkingDataBaseIT {
     @DisplayName("Check that the fare generated and out time are populated correctly in the database")
     public void testParkingLotExit() throws InterruptedException {
 
-        //Arrange
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         sleep(1000);
 
-
-        //ACT
-
         parkingService.processExitingVehicle();
 
-
-        //Assert
         Ticket ticketOutcomingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
         assertThat(ticketOutcomingVehicule).isNotNull();
         assertThat(ticketOutcomingVehicule.getOutTime()).isNotNull();
@@ -103,5 +94,30 @@ public class ParkingDataBaseIT {
 
 
     }
+    @Test
+    @DisplayName("Check that a vehicle is recurring and that its ticket is present more than once in the database")
+    public void testisReccuringUser () {
 
+            ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+            parkingService.processIncomingVehicle();
+            ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+            parkingService.processExitingVehicle();
+
+            parkingService.processIncomingVehicle();
+            ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
+            List allTicketsVEHICLE_REGLE_NUMBER  = ticketDAO.getAllTicket(VEHICLE_REGLE_NUMBER);
+
+            boolean isReccuring = parkingService.isRecurringUser(VEHICLE_REGLE_NUMBER);
+
+            assertThat(isReccuring).isTrue();
+            assertThat(allTicketsVEHICLE_REGLE_NUMBER.size()).isGreaterThan(1);
+
+    }
 }
+
+
+
+
+
+
+
