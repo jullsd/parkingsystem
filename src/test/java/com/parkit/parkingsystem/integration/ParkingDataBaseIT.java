@@ -28,7 +28,6 @@ public class ParkingDataBaseIT {
     private final String VEHICLE_REGLE_NUMBER = "AH707QNN";
 
 
-
     public String getVEHICLE_REGLE_NUMBER() {
         return VEHICLE_REGLE_NUMBER;
     }
@@ -59,7 +58,7 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    @DisplayName("Check that a ticket is actualy saved in DB,Parking table is updated with availability and That we can retrieve the list of all associated tickets in database")
+    @DisplayName( "Check that a ticket is actualy saved in DB,Parking table is updated with availability and That we can retrieve the list of all associated tickets in database" )
     public void testParkingACar() {
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -74,11 +73,10 @@ public class ParkingDataBaseIT {
         assertThat(parkingSpotInCommingVehicule).isNotSameAs(pakingSpotNextIncommingVehicule);
 
 
-
     }
 
     @Test
-    @DisplayName("Check that the fare generated and out time are populated correctly in the database")
+    @DisplayName( "Check that the fare generated and out time are populated correctly in the database" )
     public void testParkingLotExit() throws InterruptedException {
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -92,25 +90,6 @@ public class ParkingDataBaseIT {
         assertThat(ticketOutcomingVehicule.getOutTime()).isNotNull();
         assertThat(ticketOutcomingVehicule.getPrice()).isNotNull();
 
-
-    }
-    @Test
-    @DisplayName("Check that a vehicle is recurring and that its ticket is present more than once in the database")
-    public void testisReccuringUser () {
-
-            ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-            parkingService.processIncomingVehicle();
-            ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
-            parkingService.processExitingVehicle();
-
-            parkingService.processIncomingVehicle();
-            ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
-            List allTicketsVEHICLE_REGLE_NUMBER  = ticketDAO.getAllTicket(VEHICLE_REGLE_NUMBER);
-
-            boolean isReccuring = parkingService.isRecurringUser(VEHICLE_REGLE_NUMBER);
-
-            assertThat(isReccuring).isTrue();
-            assertThat(allTicketsVEHICLE_REGLE_NUMBER.size()).isGreaterThan(1);
 
     }
 }

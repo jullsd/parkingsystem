@@ -11,9 +11,12 @@ public class DataBaseConfig {
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
+        logger.info("URL " +System.getenv("DB_URL"));
+        logger.info("URL " +System.getenv("DB_USER"));
+        logger.info("URL " +System.getenv("DB_PASSWORD"));
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod", "root", "rootroot");
+                System.getenv("DB_URL"), System.getenv("DB_USER"),System.getenv("DB_PASSWORD"));
     }
 
     public void closeConnection(Connection con) {
