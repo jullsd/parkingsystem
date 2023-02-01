@@ -60,7 +60,6 @@ public class ParkingDataBaseIT {
     @Test
     @DisplayName( "Check that a ticket is actualy saved in DB,Parking table is updated with availability and That we can retrieve the list of all associated tickets in database" )
     public void testParkingACar() {
-
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
         parkingService.processIncomingVehicle();
@@ -71,8 +70,6 @@ public class ParkingDataBaseIT {
 
         assertThat(ticketIncommingVehicule.getVehicleRegNumber()).isEqualTo(VEHICLE_REGLE_NUMBER);
         assertThat(parkingSpotInCommingVehicule).isNotSameAs(pakingSpotNextIncommingVehicule);
-
-
     }
 
     @Test
