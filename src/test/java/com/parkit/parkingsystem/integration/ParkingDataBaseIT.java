@@ -12,7 +12,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.List;
+
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -26,7 +26,6 @@ public class ParkingDataBaseIT {
     private static DataBasePrepareService dataBasePrepareService;
 
     private final String VEHICLE_REGLE_NUMBER = "AH707QNN";
-
 
     public String getVEHICLE_REGLE_NUMBER() {
         return VEHICLE_REGLE_NUMBER;
@@ -55,11 +54,10 @@ public class ParkingDataBaseIT {
     private static void tearDown() {
 
     }
-
-
     @Test
-    @DisplayName( "Check that a ticket is actualy saved in DB,Parking table is updated with availability and That we can retrieve the list of all associated tickets in database" )
+    @DisplayName( "Check that a ticket is actualy saved in DB,Parking table is updated with availability" )
     public void testParkingACar() {
+
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
         parkingService.processIncomingVehicle();
@@ -70,26 +68,27 @@ public class ParkingDataBaseIT {
 
         assertThat(ticketIncommingVehicule.getVehicleRegNumber()).isEqualTo(VEHICLE_REGLE_NUMBER);
         assertThat(parkingSpotInCommingVehicule).isNotSameAs(pakingSpotNextIncommingVehicule);
+        assertThat(parkingSpotInCommingVehicule.isAvailable()).isFalse();
     }
-
     @Test
     @DisplayName( "Check that the fare generated and out time are populated correctly in the database" )
     public void testParkingLotExit() throws InterruptedException {
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        sleep(1000);
-
+        sleep(500);
         parkingService.processExitingVehicle();
-
         Ticket ticketOutcomingVehicule = ticketDAO.getTicket(VEHICLE_REGLE_NUMBER);
         assertThat(ticketOutcomingVehicule).isNotNull();
         assertThat(ticketOutcomingVehicule.getOutTime()).isNotNull();
         assertThat(ticketOutcomingVehicule.getPrice()).isNotNull();
-
-
     }
-}
+
+
+
+ }
+
+
 
 
 

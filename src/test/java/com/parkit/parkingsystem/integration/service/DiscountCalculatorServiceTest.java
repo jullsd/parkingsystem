@@ -16,12 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DiscountCalculatorServiceTest {
 
-
     private static DiscountCalculatorService discountCalculatorService;
     private Ticket ticket;
-
     private final int FREE = 0;
-
     private final int NODISCOUNT = 1;
 
 
@@ -48,7 +45,6 @@ public class DiscountCalculatorServiceTest {
 
         assertThat(ticket.getDiscount()).isEqualTo(FREE);
 
-
     }
 
     @Test
@@ -71,9 +67,7 @@ public class DiscountCalculatorServiceTest {
 
         ticket.setReccuring(true);
 
-
         discountCalculatorService.calulateDiscountforReccuringUsers(ticket);
-
 
         assertThat(ticket.getDiscount()).isEqualTo(Discount.FIVE_PERCENT_OF_DISCOUNT);
     }

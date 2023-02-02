@@ -58,13 +58,11 @@ public class ParkingService {
         }
     }
 
-
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
 
     }
-
     public boolean isRecurringUser(String vehicleRegNumber) {
         List<Ticket> tickets = ticketDAO.getAllTicket(vehicleRegNumber);
 
@@ -91,7 +89,7 @@ public class ParkingService {
     }
 
 
-    private ParkingType getVehichleType() {
+    public  ParkingType getVehichleType() {
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
