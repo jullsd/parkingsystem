@@ -4,7 +4,6 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingSpotTest {
 
@@ -16,16 +15,13 @@ class ParkingSpotTest {
 
         assertThat(parkingSpotp1.equals(parkingSpotp2)).isTrue();
         assertThat(parkingSpotp1.hashCode()).isEqualTo(1);
-
     }
 
     @Test
     public void testTwoDifferentParkingSpot() {
-
         ParkingSpot parkingSpotp1 = new ParkingSpot(1, ParkingType.BIKE, true);
         assertThat(parkingSpotp1.equals(null)).isFalse();
         assertThat(parkingSpotp1.hashCode()).isEqualTo(1);
-
     }
 
 }

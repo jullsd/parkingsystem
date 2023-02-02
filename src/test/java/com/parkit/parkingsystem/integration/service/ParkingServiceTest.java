@@ -37,8 +37,6 @@ public class ParkingServiceTest {
     private List listOfticketsVEHICLE_REGLE_NUMBER = new ArrayList();
     private final int TICKET_1 = 1;
     private final int TICKET_2 = 2;
-
-
     @Test
     public void isReccuringUser() {
 
@@ -68,15 +66,14 @@ public class ParkingServiceTest {
         assertThat(parkingService.getVehichleType()).isEqualTo(ParkingType.BIKE);
 
     }
-
     @Test
     public void testGetVehicleUnknown() {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         when(inputReaderUtil.readSelection()).thenReturn(0);
 
         assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType());
-
     }
+
 
 }
 
