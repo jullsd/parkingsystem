@@ -8,10 +8,13 @@ import java.util.Date;
 
 public class FareCalculatorService {
 
+    private DiscountCalculatorService discountCalculatorService = new DiscountCalculatorService();
+
     public void calculateFare(Ticket ticket) {
         if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
             throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
         }
+        discountCalculatorService.calculateDiscount(ticket);
 
         Date inTime = ticket.getInTime();
         Date outTime = ticket.getOutTime();
@@ -21,11 +24,11 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
-                ticket.setPrice(differenceInHours * Fare.CAR_RATE_PER_HOUR);
+                ticket.setPrice(differenceInHours * Fare.CAR_RATE_PER_HOUR * ticket.getDiscount());
                 break;
             }
             case BIKE: {
-                ticket.setPrice(differenceInHours * Fare.BIKE_RATE_PER_HOUR);
+                ticket.setPrice(differenceInHours * Fare.BIKE_RATE_PER_HOUR * ticket.getDiscount());
                 break;
             }
             default:
